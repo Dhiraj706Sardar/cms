@@ -14,40 +14,17 @@ public class WebController {
 
     @GetMapping("/welcome")
     public String welcome() {
-        return "<!DOCTYPE html>" +
-               "<html>" +
-               "<head>" +
-               "    <title>Welcome to College Management System</title>" +
-               "    <style>" +
-               "        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }" +
-               "        .container { max-width: 800px; margin: 0 auto; }" +
-               "        .btn { display: inline-block; padding: 10px 20px; margin: 10px; " +
-               "               background-color: #4CAF50; color: white; text-decoration: none; " +
-               "               border-radius: 5px; }" +
-               "        .btn:hover { background-color: #45a049; }" +
-               "    </style>" +
-               "</head>" +
-               "<body>" +
-               "    <div class='container'>" +
-               "        <h1>Welcome to College Management System</h1>" +
-               "        <p>Please choose an option below to get started:</p>" +
-               "        <div>" +
-               "            <a href='/swagger-ui.html' class='btn'>API Documentation (Swagger UI)</a>" +
-               "            <a href='/signup' class='btn'>Sign Up</a>" +
-               "        </div>" +
-               "    </div>" +
-               "</body>" +
-               "</html>";
+        return "welcome";  // serves welcome.html from templates
     }
 
     @GetMapping("/login")
     public String login() {
-        return "forward:/login.html";
+        return "login";  // serves login.html from templates
     }
 
     @GetMapping("/signup")
     public String signup() {
-        return "forward:/signup.html";
+        return "signup";  // serves signup.html from templates
     }
 
     @GetMapping("/admin/dashboard")

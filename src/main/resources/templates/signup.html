@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,86 +7,93 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #fff;
+            background: white;
+            padding: 2rem;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
         }
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
         .form-group {
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
         label {
-            display: block;
-            margin-bottom: 5px;
             font-weight: bold;
         }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        select {
-            width: 100%;
-            padding: 10px;
+        input, select {
+            padding: 0.75rem;
             border: 1px solid #ddd;
             border-radius: 4px;
-            box-sizing: border-box;
+            font-size: 1rem;
         }
         button {
             background-color: #4CAF50;
             color: white;
-            padding: 12px 20px;
+            padding: 0.75rem;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            width: 100%;
-            font-size: 16px;
+            font-size: 1rem;
+            margin-top: 1rem;
         }
         button:hover {
             background-color: #45a049;
         }
         .login-link {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 1rem;
+        }
+        .login-link a {
+            color: #4CAF50;
+            text-decoration: none;
         }
         .error {
             color: red;
-            margin-top: 10px;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Create an Account</h1>
-        <div id="error-message" class="error"></div>
-        <form id="signup-form">
+        <form id="signup-form" th:action="@{/api/auth/signup}" th:method="post">
             <div class="form-group">
-                <label for="name">Full Name:</label>
+                <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" required>
             </div>
             <div class="form-group">
-                <label for="email">Email:</label>
+                <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="form-group">
-                <label for="role">I am a:</label>
+                <label for="role">Role</label>
                 <select id="role" name="role" required>
-                    <option value="">Select role</option>
+                    <option value="">Select a role</option>
                     <option value="STUDENT">Student</option>
                     <option value="TEACHER">Teacher</option>
                     <option value="ADMIN">Administrator</option>
@@ -99,7 +106,7 @@
         </div>
     </div>
 
-    <script>
+    <script th:inline="javascript">
         document.getElementById('signup-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -119,20 +126,15 @@
                     body: JSON.stringify(formData)
                 });
 
-                const data = await response.json();
-                
                 if (response.ok) {
-                    // Redirect to login page on successful signup
-                    window.location.href = '/login?signup=success';
+                    window.location.href = '/login?registered=true';
                 } else {
-                    // Show error message
-                    document.getElementById('error-message').textContent = 
-                        data.message || 'An error occurred during signup';
+                    const error = await response.json();
+                    alert(error.message || 'Registration failed');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('error-message').textContent = 
-                    'An error occurred. Please try again.';
+                alert('An error occurred. Please try again.');
             }
         });
     </script>

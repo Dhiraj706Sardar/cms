@@ -1,35 +1,134 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - College Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .signup-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+        .signup-link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
 </head>
 <body>
-    <h2>Login Page</h2>
-    <form th:action="@{/perform_login}" method="post">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+    <div class="container">
+        <h1>Welcome Back</h1>
+        
+        <!-- Error Message -->
+        <div th:if="${param.error}" class="alert alert-error">
+            Invalid username or password. Please try again.
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+        
+        <!-- Logout Message -->
+        <div th:if="${param.logout}" class="alert alert-success">
+            You have been successfully logged out.
         </div>
-        <div>
-            <button type="submit">Login</button>
+        
+        <!-- Registration Success Message -->
+        <div th:if="${param.registered}" class="alert alert-success">
+            Registration successful! Please log in with your credentials.
         </div>
-        <div>
-            <p style="color:red;">
-                <!-- Display error message if login fails -->
-                <div th:if="${param.error}">
-                    Invalid username or password.
-                </div>
-                <div th:if="${param.logout}">
-                    You have been logged out.
-                </div>
-            </p>
+        
+        <form th:action="@{/perform_login}" method="post">
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="text" id="username" name="username" required 
+                       placeholder="Enter your email" autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required
+                       placeholder="Enter your password">
+            </div>
+            
+            <button type="submit">Log In</button>
+        </form>
+        
+        <div class="signup-link">
+            Don't have an account? <a href="/signup">Sign up</a>
         </div>
-    </form>
+    </div>
 </body>
 </html>
