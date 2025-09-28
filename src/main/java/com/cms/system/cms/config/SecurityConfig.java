@@ -60,10 +60,15 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers(
+                    "/",
+                    "/welcome",
+                    "/signup",
                     "/api/auth/**",
                     "/v3/api-docs/**",
+                    "/swagger-resources/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
+                    "/webjars/**",
                     "/api/test/**",
                     "/error"
                 ).permitAll()
