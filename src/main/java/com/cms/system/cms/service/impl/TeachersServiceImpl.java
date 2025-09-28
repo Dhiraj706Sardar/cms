@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TeachersServiceImpl implements TeachersService {
@@ -20,7 +21,7 @@ public class TeachersServiceImpl implements TeachersService {
     }
 
     @Override
-    public Teachers getTeacherById(Long id) {
+    public Teachers getTeacherById(UUID id) {
         return teachersRepository.findById(id).orElse(null);
     }
 
@@ -30,7 +31,7 @@ public class TeachersServiceImpl implements TeachersService {
     }
 
     @Override
-    public Teachers updateTeacher(Long id, Teachers teacher) {
+    public Teachers updateTeacher(UUID id, Teachers teacher) {
         if (teachersRepository.existsById(id)) {
             teacher.setTeacherId(id);
             return teachersRepository.save(teacher);
@@ -39,7 +40,7 @@ public class TeachersServiceImpl implements TeachersService {
     }
 
     @Override
-    public void deleteTeacher(Long id) {
+    public void deleteTeacher(UUID id) {
         teachersRepository.deleteById(id);
     }
 }

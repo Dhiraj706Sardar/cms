@@ -1,0 +1,426 @@
+{
+  "api_documentation": {
+    "version": "1.0.0",
+    "base_url": "http://localhost:8080/api",
+    "authentication_required": true,
+    "endpoints": {
+      "auth": {
+        "login": {
+          "method": "POST",
+          "url": "/auth/signin",
+          "description": "Authenticate user and get JWT token",
+          "request": {
+            "content-type": "application/json",
+            "body": {
+              "email": "string (required, email format)",
+              "password": "string (required)"
+            },
+            "example": {
+              "email": "user@example.com",
+              "password": "yourpassword"
+            }
+          },
+          "response": {
+            "success": {
+              "status": 200,
+              "body": {
+                "accessToken": "string (JWT token)",
+                "id": "number (user ID)",
+                "username": "string (email)",
+                "email": "string",
+                "roles": ["ROLE_ADMIN"],
+                "tokenType": "Bearer"
+              }
+            },
+            "error": {
+              "status": 401,
+              "body": {
+                "message": "Error: Bad credentials"
+              }
+            }
+          }
+        },
+        "register": {
+          "method": "POST",
+          "url": "/auth/signup",
+          "description": "Register a new user",
+          "request": {
+            "content-type": "application/json",
+            "body": {
+              "name": "string (required, max 50 chars)",
+              "email": "string (required, email format, unique)",
+              "password": "string (required, min 6 chars)",
+              "role": "string (enum: ADMIN, TEACHER, STUDENT)"
+            },
+            "example": {
+              "name": "John Doe",
+              "email": "john.doe@example.com",
+              "password": "securePassword123",
+              "role": "ADMIN"
+            }
+          },
+          "response": {
+            "success": {
+              "status": 200,
+              "body": {
+                "message": "User registered successfully!"
+              }
+            },
+            "error": {
+              "status": 400,
+              "body": {
+                "message": "Error: Email is already in use!"
+              }
+            }
+          }
+        },
+        "refresh_token": {
+          "method": "POST",
+          "url": "/auth/refresh-token",
+          "description": "Refresh JWT token",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "response": {
+            "success": {
+              "status": 200,
+              "body": {
+                "accessToken": "string (new JWT token)",
+                "tokenType": "Bearer"
+              }
+            }
+          }
+        }
+      },
+      "users": {
+        "get_all": {
+          "method": "GET",
+          "url": "/users",
+          "description": "Get all users",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "response": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "name": "Admin User",
+                "email": "admin@example.com",
+                "role": "ADMIN"
+              }
+            ]
+          }
+        },
+        "get_by_id": {
+          "method": "GET",
+          "url": "/users/{id}",
+          "description": "Get user by ID",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "path_parameters": {
+            "id": "number (user ID)"
+          },
+          "response": {
+            "success": {
+              "status": 200,
+              "body": {
+                "id": 1,
+                "name": "Admin User",
+                "email": "admin@example.com",
+                "role": "ADMIN"
+              }
+            },
+            "error": {
+              "status": 404,
+              "body": {}
+            }
+          }
+        },
+        "create": {
+          "method": "POST",
+          "url": "/users",
+          "description": "Create a new user (admin only)",
+          "headers": {
+            "Authorization": "Bearer <token>",
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "name": "string (required)",
+            "email": "string (required, unique)",
+            "password": "string (required)",
+            "role": "string (enum: ADMIN, TEACHER, STUDENT)"
+          },
+          "response": {
+            "success": {
+              "status": 201,
+              "body": {
+                "id": 2,
+                "name": "New User",
+                "email": "new.user@example.com",
+                "role": "TEACHER"
+              }
+            }
+          }
+        },
+        "update": {
+          "method": "PUT",
+          "url": "/users/{id}",
+          "description": "Update user by ID",
+          "headers": {
+            "Authorization": "Bearer <token>",
+            "Content-Type": "application/json"
+          },
+          "path_parameters": {
+            "id": "number (user ID)"
+          },
+          "body": {
+            "name": "string (optional)",
+            "email": "string (optional, unique)",
+            "password": "string (optional)",
+            "role": "string (optional, enum: ADMIN, TEACHER, STUDENT)"
+          },
+          "response": {
+            "success": {
+              "status": 200,
+              "body": {
+                "id": 2,
+                "name": "Updated Name",
+                "email": "updated@example.com",
+                "role": "TEACHER"
+              }
+            },
+            "error": {
+              "status": 404,
+              "body": {}
+            }
+          }
+        },
+        "delete": {
+          "method": "DELETE",
+          "url": "/users/{id}",
+          "description": "Delete user by ID",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "path_parameters": {
+            "id": "number (user ID)"
+          },
+          "response": {
+            "success": {
+              "status": 204,
+              "body": {}
+            },
+            "error": {
+              "status": 404,
+              "body": {}
+            }
+          }
+        }
+      },
+      "admins": {
+        "get_all": {
+          "method": "GET",
+          "url": "/admins",
+          "description": "Get all admins",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "response": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "userId": 1,
+                "user": {
+                  "id": 1,
+                  "name": "Admin User",
+                  "email": "admin@example.com",
+                  "role": "ADMIN"
+                }
+              }
+            ]
+          }
+        },
+        "get_by_id": {
+          "method": "GET",
+          "url": "/admins/{id}",
+          "description": "Get admin by ID",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "path_parameters": {
+            "id": "number (admin ID)"
+          },
+          "response": {
+            "success": {
+              "status": 200,
+              "body": {
+                "id": 1,
+                "userId": 1,
+                "user": {
+                  "id": 1,
+                  "name": "Admin User",
+                  "email": "admin@example.com",
+                  "role": "ADMIN"
+                }
+              }
+            },
+            "error": {
+              "status": 404,
+              "body": {}
+            }
+          }
+        },
+        "create": {
+          "method": "POST",
+          "url": "/admins",
+          "description": "Create a new admin (super admin only)",
+          "headers": {
+            "Authorization": "Bearer <token>",
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "userId": "number (existing user ID with ADMIN role)"
+          },
+          "response": {
+            "success": {
+              "status": 201,
+              "body": {
+                "id": 2,
+                "userId": 3,
+                "user": {
+                  "id": 3,
+                  "name": "New Admin",
+                  "email": "new.admin@example.com",
+                  "role": "ADMIN"
+                }
+              }
+            }
+          }
+        }
+      },
+      "teachers": {
+        "get_all": {
+          "method": "GET",
+          "url": "/teachers",
+          "description": "Get all teachers",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "response": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "userId": 2,
+                "department": "Computer Science",
+                "user": {
+                  "id": 2,
+                  "name": "Teacher User",
+                  "email": "teacher@example.com",
+                  "role": "TEACHER"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "students": {
+        "get_all": {
+          "method": "GET",
+          "url": "/students",
+          "description": "Get all students",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "response": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "userId": 3,
+                "rollNumber": "S001",
+                "user": {
+                  "id": 3,
+                  "name": "Student User",
+                  "email": "student@example.com",
+                  "role": "STUDENT"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "courses": {
+        "get_all": {
+          "method": "GET",
+          "url": "/courses",
+          "description": "Get all courses",
+          "headers": {
+            "Authorization": "Bearer <token>"
+          },
+          "response": {
+            "status": 200,
+            "body": [
+              {
+                "id": 1,
+                "name": "Introduction to Computer Science",
+                "code": "CS101",
+                "description": "Basic concepts of computer science",
+                "teacherId": 1
+              }
+            ]
+          }
+        }
+      },
+      "enrollments": {
+        "enroll": {
+          "method": "POST",
+          "url": "/enrollments",
+          "description": "Enroll a student in a course",
+          "headers": {
+            "Authorization": "Bearer <token>",
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "studentId": "number (existing student ID)",
+            "courseId": "number (existing course ID)"
+          },
+          "response": {
+            "success": {
+              "status": 201,
+              "body": {
+                "id": 1,
+                "studentId": 1,
+                "courseId": 1,
+                "enrollmentDate": "2023-01-01T00:00:00.000+00:00"
+              }
+            }
+          }
+        }
+      }
+    },
+    "error_responses": {
+      "400": "Bad Request - Invalid input data",
+      "401": "Unauthorized - Authentication required or invalid token",
+      "403": "Forbidden - Insufficient permissions",
+      "404": "Not Found - Resource not found",
+      "500": "Internal Server Error - Something went wrong on the server"
+    },
+    "security": {
+      "authentication": "JWT (JSON Web Token)",
+      "required_headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "roles": ["ADMIN", "TEACHER", "STUDENT"]
+    },
+    "notes": [
+      "All API endpoints require authentication unless otherwise specified.",
+      "Replace <token> with the JWT token received from /auth/signin.",
+      "For endpoints that require specific roles, the user must have the appropriate role.",
+      "All dates are in ISO 8601 format (e.g., 2023-01-01T00:00:00.000+00:00)."
+    ]
+  }
+}

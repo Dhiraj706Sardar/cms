@@ -2,11 +2,12 @@ package com.cms.system.cms.service;
 
 import com.cms.system.cms.entity.Teachers;
 import java.util.List;
+import java.util.UUID;
 
 public interface TeachersService {
     List<Teachers> getAllTeachers();
-    Teachers getTeacherById(Long id);
+    Teachers getTeacherById(UUID id);
     Teachers createTeacher(Teachers teacher);
-    Teachers updateTeacher(Long id, Teachers teacher);
-    void deleteTeacher(Long id);
+    Teachers updateTeacher(UUID id, Teachers teacher);
+    void deleteTeacher(UUID id);
 }
